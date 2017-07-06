@@ -67,8 +67,5 @@ clean$Street.2 <- str_replace_all(clean$Street.2,"Lane","Ln.")
 #***insert codes here***
 
 
-###Task4
-#Done by Yimin
-
 #Remove the "Strange HTML column"
 clean$Strange.HTML <- NULL
