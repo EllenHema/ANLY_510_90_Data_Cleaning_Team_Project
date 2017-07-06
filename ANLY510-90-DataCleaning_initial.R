@@ -1,34 +1,71 @@
+###Updates & Package Installation
 
+install.packages("installr")
+require(installr)
+updateR()
+
+install.packages("stringr")
+library(stringr)
+install.packages("zoo")
 library(zoo)
 
-clean <- read.csv("~/DataClean.csv",header = TRUE)
+
+###Task1 
+#Done by Ellen
+
+#Populate the missing values in the Area variable with an appropriate values 
+#(Birmingham, Coventry, Dudley, Sandwell, Solihull, Walsall or Wolverhampton) 
+
+clean <- read.csv("dirty_data.csv",header = TRUE)
 clean$Area <- sub("^$", NA, clean$Area)
 clean$Area <- na.locf(clean$Area)
 
 
-clean$Street <- str_replace_all(clean$Street,"????"," ")
-clean$Street.2 <- str_trim(clean$Street.2)
+###Task2 
+#Done by Yimin
 
-# Assignment-7-collaboration-on-repository-and-data-cleanup
-# Remove special characters, padding from Street 1 and Street 2 variables,etc.
-DataClean<-read.csv("~/Downloads/DataClean.csv")
-clean<-read.csv("~/Downloads/DataClean.csv")
-View(clean)
-clean$Street <- gsub("[^A-Za-z ]", " ", clean$Street)
-clean$Street <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", clean$Street, perl=TRUE)
+#Remove special characters from Street 1 and Street 2
+clean$Street <- str_replace_all(clean$Street,"[^[:alnum:]]","")
+clean$Street <- str_replace_all(clean$Street,"[^a-zA-Z0-9]"," ")
+clean$Street.2 <- str_replace_all(clean$Street.2,"[^[:alnum:]]"," ")
+
+#Remove padding (the white space before and after the text) from Street 1 and Street 2.
+clean$Street <- trimws(clean$Street)
+clean$Street.2 <- trimws(clean$Street.2)
+
+#Make sure the first letters of street names are capitalized
+clean$Street <- tolower(clean$Street)
+clean$Street.2 <- tolower(clean$Street.2)
+
+simpleCap <- function(x) 
+              {s <- strsplit(x, " ")[[1]]
+                paste(toupper(substring(s, 1,1)), 
+              substring(s, 2),
+              sep="", collapse=" ")}
+
+clean$Street <- sapply(clean$Street,simpleCap)
+clean$Street.2 <- sapply(clean$Street.2,simpleCap)
+
+#Make sure the street denominations are following the same standard. 
+#For example, all streets are indicated as "str.", avenues as "ave.", etc.
+
+clean$Street <- str_replace_all(clean$Street,"Rd","Rd.")
+clean$Street <- str_replace_all(clean$Street,"Road","Rd.")
+clean$Street.2 <- str_replace_all(clean$Street.2,"Rd","Rd.")
+clean$Street.2 <- str_replace_all(clean$Street.2,"Road","Rd.")
+
+clean$Street <- str_replace_all(clean$Street,"Street","St.")
+clean$Street.2 <- str_replace_all(clean$Street.2,"Street","St.")
+
+clean$Street <- str_replace_all(clean$Street,"Lane","Ln.")
+clean$Street.2 <- str_replace_all(clean$Street.2,"Lane","Ln.")
 
 
-clean$Street.2 <- gsub("[^A-Za-z ]", " ", clean$Street.2)
-clean$Street.2 <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", clean$Street.2, perl=TRUE)
-clean$Street <- gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", clean$Street, perl=TRUE)
-clean$Street.2 <- gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", clean$Street.2, perl=TRUE)
-install.packages('gsubfn')
-install.packages('proto')
-patterns     <- c("Lane", "Road", "Avenue", "Green", "Hospital", "Village", "Center", "Drive", "Circle", "Park","Street")
-replacements <- c("Lan.",  "Rd.", "Ave.", "Gr.","Hosp.","Vil.","Ctr.", "Dr.", "Cr.","Pk.","Str.")
-library('proto)
-library('gsubfn')
-clean$Street <- gsubfn("\\b\\w+\\b", as.list(setNames(replacements, patterns)), clean$Street)
-clean$Street.2 <- gsubfn("\\b\\w+\\b", as.list(setNames(replacements, patterns)), clean$Street.2)
-View(clean)
+###Task3 
+#If the value in Street 2 duplicates the value in Street 1, remove the value in Street 2
 
+#***insert codes here***
+
+
+#Remove the "Strange HTML column"
+clean$Strange.HTML <- NULL
