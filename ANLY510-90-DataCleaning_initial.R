@@ -22,7 +22,7 @@ clean$Area <- na.locf(clean$Area)
 
 
 ###Task2 
-#Done by Yimin
+#Done by Chen Wu
 
 #Remove special characters from Street 1 and Street 2
 clean$Street <- str_replace_all(clean$Street,"[^[:alnum:]]","")
