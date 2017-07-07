@@ -64,8 +64,19 @@ clean$Street.2 <- str_replace_all(clean$Street.2,"Lane","Ln.")
 ###Task3 
 #If the value in Street 2 duplicates the value in Street 1, remove the value in Street 2
 
-#***insert codes here***
+#Done by Qi Zhang
+#If the value in Street 2 duplicates the value in Street 1, remove the value in Street 2
 
+i <- 1
+
+while(i < NROW(clean)) 
+{
+  if(clean$Street[i] == clean$Street.2[i]) 
+  {
+    clean$Street.2[i] = ""
+  }
+  i <- i+1
+}
 
 #Remove the "Strange HTML column"
 clean$Strange.HTML <- NULL
